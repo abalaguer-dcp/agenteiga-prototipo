@@ -191,14 +191,6 @@ th.actions-col,td.actions-col{white-space:nowrap}
 #studyModal input:disabled,#studyModal textarea:disabled,#studyModal select:disabled{background:var(--surface2);color:var(--text);opacity:1;cursor:default}
 .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:22px;padding-top:16px;border-top:1px solid var(--border)}
 
-/* Autocompletado de usuarios (mat-autocomplete) */
-.user-autocomplete{position:relative;width:100%}
-.user-autocomplete input{width:100%;display:block}
-.user-suggestions{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:60;background:#FFFFFF;border-radius:4px;box-shadow:0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px rgba(0,0,0,.14),0 1px 10px rgba(0,0,0,.12);max-height:220px;overflow:auto;padding:8px 0}
-.user-suggestion{padding:10px 16px;cursor:pointer}
-.user-suggestion:hover{background:rgba(0,0,0,.04)}
-.user-suggestion strong{display:block;font-weight:500}
-.user-suggestion span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
 
 /* Asistente de nuevo estudio */
 .wizard-tabs{display:flex;align-items:center;gap:12px;margin:18px 0 22px}
@@ -369,19 +361,6 @@ th.actions-col,td.actions-col{white-space:nowrap}
         </div>
       </section>
 
-      <section class="page" id="usuarios">
-        <div class="card">
-          <div class="toolbar"><div class="search-field"><span class="material-icons">search</span><input id="usersFilterInput" placeholder="Buscar usuario por nombre o correo..." oninput="filterUsers()"></div><button class="btn primary" onclick="openUserModal()"><span class="material-icons">person_add</span>Registrar usuario</button></div>
-          <div class="table-wrap"><table>
-            <thead><tr><th>Usuario</th><th>Correo</th><th>Rol</th><th>Estado</th><th class="actions-col">Acciones</th></tr></thead>
-            <tbody>
-              <tr><td>Mateo Carranza</td><td>mateo.carranza@hoc.com</td><td>Administrador</td><td><span class="pill ok">Activo</span></td><td class="actions-col"><div class="row-actions"><button class="btn" onclick="openEditUserModal(this)"><span class="material-icons">edit</span>Editar</button></div></td></tr>
-              <tr><td>Laura Morales</td><td>laura.morales@hoc.com</td><td>Usuario</td><td><span class="pill ok">Activo</span></td><td class="actions-col"><div class="row-actions"><button class="btn" onclick="openEditUserModal(this)"><span class="material-icons">edit</span>Editar</button></div></td></tr>
-            </tbody>
-          </table></div>
-        </div>
-      </section>
-
       <!-- SHARED CHAT PAGES -->
       <section class="page" id="chatinconsistencias">
         <div class="card chat-card">
@@ -527,74 +506,6 @@ th.actions-col,td.actions-col{white-space:nowrap}
   </div>
 </div></div>
 
-<!-- MODAL USUARIO ADMIN -->
-<div class="modal" id="userModal"><div class="modal-card" style="width:min(720px,94vw)">
-  <div class="card-header">
-    <div><h2>Registrar usuario</h2><div class="muted small">Busca al usuario y asígnale uno de los roles disponibles.</div></div>
-    <button class="icon-btn" aria-label="Cerrar" onclick="closeModal('userModal')"><span class="material-icons">close</span></button>
-  </div>
-  <div class="field full">
-    <label>Usuario *</label>
-    <div class="user-autocomplete">
-      <input id="userSearchInput" autocomplete="off" placeholder="Escribe nombre o correo para seleccionar un usuario..." oninput="filterUserSuggestions()" onfocus="filterUserSuggestions()">
-      <div id="userSuggestions" class="user-suggestions hidden"></div>
-    </div>
-    <div class="muted small">Selecciona un usuario de las coincidencias sugeridas.</div>
-  </div>
-  <div class="field full">
-    <label>Rol *</label>
-    <select id="newUserRole">
-      <option value="Administrador">Administrador</option>
-      <option value="Usuario" selected>Usuario</option>
-    </select>
-  </div>
-  <div id="userSearchResult" class="hidden" style="margin-top:14px">
-    <div class="path-box" style="display:flex;justify-content:space-between;align-items:center;gap:12px">
-      <div>
-        <strong id="foundUserName">Carlos Mendoza</strong>
-        <div class="muted small" id="foundUserEmail">carlos.mendoza@hoc.com</div>
-      </div>
-      <span class="pill info">Usuario encontrado</span>
-    </div>
-  </div>
-  <div class="modal-actions">
-    <button class="btn" onclick="closeModal('userModal')">Cancelar</button>
-    <button class="btn primary" id="addUserBtn" onclick="addUser()" disabled><span class="material-icons">person_add</span>Agregar usuario</button>
-  </div>
-</div></div>
-
-<!-- MODAL EDITAR USUARIO -->
-<div class="modal" id="editUserModal"><div class="modal-card" style="width:min(640px,94vw)">
-  <div class="card-header">
-    <div><h2>Editar usuario</h2><div class="muted small">Solo se puede modificar el rol y el estado del usuario.</div></div>
-    <button class="icon-btn" aria-label="Cerrar" onclick="closeModal('editUserModal')"><span class="material-icons">close</span></button>
-  </div>
-  <div class="path-box">
-    <strong id="editUserName"></strong>
-    <div class="muted small" id="editUserEmail"></div>
-  </div>
-  <div class="form-grid">
-    <div class="field">
-      <label>Rol *</label>
-      <select id="editUserRole">
-        <option value="Administrador">Administrador</option>
-        <option value="Usuario">Usuario</option>
-      </select>
-    </div>
-    <div class="field">
-      <label>Estado *</label>
-      <select id="editUserStatus">
-        <option value="Activo">Activo</option>
-        <option value="Inactivo">Inactivo</option>
-      </select>
-    </div>
-  </div>
-  <div class="modal-actions">
-    <button class="btn" onclick="closeModal('editUserModal')">Cancelar</button>
-    <button class="btn primary" onclick="saveUserChanges()"><span class="material-icons">check</span>Guardar cambios</button>
-  </div>
-</div></div>
-
 <!-- MODAL ESTUDIO ADMIN -->
 <div class="modal" id="studyModal"><div class="modal-card">
   <div class="card-header"><div><h2 id="studyModalTitle">Nuevo estudio ambiental</h2><div class="muted small" id="studyModalSubtitle">Registra la información general y asocia los repositorios.</div></div><button class="icon-btn" aria-label="Cerrar" onclick="closeModal('studyModal')"><span class="material-icons">close</span></button></div>
@@ -733,7 +644,6 @@ const adminNav = `
 <div class="nav-title">Gestión</div>
 <div class="nav">
   <button class="nav-btn" data-page="estudios"><span class="material-icons">folder_open</span><span>Estudios ambientales</span></button>
-  <button class="nav-btn" data-page="usuarios"><span class="material-icons">manage_accounts</span><span>Usuarios y roles</span></button>
 </div>
 
 <div class="nav-title">Consultas</div>
@@ -767,7 +677,6 @@ const meta={
   chatinconsistencias:["Chat Principal","Consultas generales sobre los capítulos del estudio, comparaciones entre ellos y otras consultas relacionadas con su contenido."],
   chatnormas:["Normas legales","Chat para consultas sobre normativa aplicable al estudio seleccionado."],
   chatobservaciones:["Observaciones históricas","Chat para consultas sobre antecedentes y observaciones históricas."],
-  usuarios:["Usuarios y roles","Administración de accesos y permisos."],
   reportes:["Reportes","Selecciona un estudio para consultar, ejecutar análisis y descargar sus reportes disponibles."]
 };
 
@@ -840,8 +749,6 @@ function changeAnalysisReportType(){
   if(requirement){
     if(!currentAnalysisType){
       requirement.textContent="Selecciona el tipo de reporte y los capítulos a analizar.";
-    }else if(currentAnalysisType==="Observaciones históricas"){
-      requirement.textContent="Selecciona como mínimo 2 capítulos para generar el reporte de observaciones históricas.";
     }else{
       requirement.textContent="Selecciona como mínimo 1 capítulo para iniciar el análisis.";
     }
@@ -851,7 +758,7 @@ function changeAnalysisReportType(){
 
 function updateAnalysisSelection(){
   const selected=document.querySelectorAll('#analysisChapterChecklist input[type="checkbox"]:checked').length;
-  const minRequired=currentAnalysisType==="Observaciones históricas" ? 2 : 1;
+  const minRequired=1;
   const button=document.getElementById("startAnalysisBtn");
   const validation=document.getElementById("analysisValidation");
   if(button) button.disabled=!currentAnalysisType || selected<minRequired;
@@ -868,7 +775,7 @@ function updateAnalysisSelection(){
 
 function confirmAnalysis(){
   const selected=[...document.querySelectorAll('#analysisChapterChecklist input[type="checkbox"]:checked')].map(input=>input.value);
-  const minRequired=currentAnalysisType==="Observaciones históricas" ? 2 : 1;
+  const minRequired=1;
   if(!currentAnalysisType || selected.length<minRequired) return;
   closeModal("analysisChaptersModal");
   alert("Se inició el análisis de " + currentAnalysisType + " para los capítulos: " + selected.join(", ") + ".\n\nPrototipo: al finalizar, el reporte aparecerá en el listado de reportes generados.");
@@ -890,15 +797,6 @@ function filterReports(){
     row.style.display=(matchesType && matchesChapter && matchesFrom && matchesTo) ? "" : "none";
   });
 }
-function filterUsers(){
-  const query=(document.getElementById("usersFilterInput")?.value||"").trim().toLowerCase();
-  document.querySelectorAll("#usuarios tbody tr").forEach(row=>{
-    const user=(row.cells[0]?.textContent||"").toLowerCase();
-    const email=(row.cells[1]?.textContent||"").toLowerCase();
-    row.style.display=(!query || user.includes(query) || email.includes(query)) ? "" : "none";
-  });
-}
-
 function clearChat(button){
   const card=button.closest(".chat-card");
   if(!card) return;
@@ -909,96 +807,6 @@ function clearChat(button){
 
 function openModal(id){document.getElementById(id).classList.add("show")}
 function closeModal(id){document.getElementById(id).classList.remove("show")}
-const availableUsers=[
-  {name:"Carlos Mendoza",email:"carlos.mendoza@hoc.com"},
-  {name:"Andrea Salazar",email:"andrea.salazar@hoc.com"},
-  {name:"Luis Paredes",email:"luis.paredes@hoc.com"},
-  {name:"María Torres",email:"maria.torres@hoc.com"},
-  {name:"Jorge Ramírez",email:"jorge.ramirez@hoc.com"}
-];
-let selectedUser=null;
-function openUserModal(){
-  const input=document.getElementById("userSearchInput");
-  const result=document.getElementById("userSearchResult");
-  const suggestions=document.getElementById("userSuggestions");
-  const addBtn=document.getElementById("addUserBtn");
-  selectedUser=null;
-  if(input) input.value="";
-  if(result) result.classList.add("hidden");
-  if(suggestions){ suggestions.innerHTML=""; suggestions.classList.add("hidden"); }
-  if(addBtn) addBtn.disabled=true;
-  openModal("userModal");
-  if(input) setTimeout(()=>input.focus(),0);
-}
-function filterUserSuggestions(){
-  const input=document.getElementById("userSearchInput");
-  const box=document.getElementById("userSuggestions");
-  const query=(input?.value||"").trim().toLowerCase();
-  selectedUser=null;
-  document.getElementById("userSearchResult")?.classList.add("hidden");
-  const addBtn=document.getElementById("addUserBtn");
-  if(addBtn) addBtn.disabled=true;
-  if(!box) return;
-  if(!query){
-    box.innerHTML="";
-    box.classList.add("hidden");
-    return;
-  }
-  const matches=availableUsers.filter(u=>u.name.toLowerCase().includes(query) || u.email.toLowerCase().includes(query)).slice(0,5);
-  if(!matches.length){
-    box.innerHTML='<div class="user-suggestion"><span>No se encontraron coincidencias</span></div>';
-    box.classList.remove("hidden");
-    return;
-  }
-  box.innerHTML=matches.map((u)=>`<div class="user-suggestion" onclick="selectUserSuggestion(${availableUsers.indexOf(u)})"><strong>${u.name}</strong><span>${u.email}</span></div>`).join("");
-  box.classList.remove("hidden");
-}
-function selectUserSuggestion(index){
-  const user=availableUsers[index];
-  if(!user) return;
-  selectedUser=user;
-  const input=document.getElementById("userSearchInput");
-  if(input) input.value=`${user.name} — ${user.email}`;
-  const name=document.getElementById("foundUserName");
-  const email=document.getElementById("foundUserEmail");
-  if(name) name.textContent=user.name;
-  if(email) email.textContent=user.email;
-  document.getElementById("userSuggestions")?.classList.add("hidden");
-  document.getElementById("userSearchResult")?.classList.remove("hidden");
-  const addBtn=document.getElementById("addUserBtn");
-  if(addBtn) addBtn.disabled=false;
-}
-function addUser(){
-  const name=document.getElementById("foundUserName")?.textContent||"Usuario";
-  const email=document.getElementById("foundUserEmail")?.textContent||"";
-  const role=document.getElementById("newUserRole")?.value||"Usuario";
-  const tbody=document.querySelector("#usuarios tbody");
-  if(tbody){
-    const tr=document.createElement("tr");
-    tr.innerHTML=`<td>${name}</td><td>${email}</td><td>${role}</td><td><span class="pill ok">Activo</span></td><td class="actions-col"><div class="row-actions"><button class="btn" onclick="openEditUserModal(this)"><span class="material-icons">edit</span>Editar</button></div></td>`;
-    tbody.appendChild(tr);
-  }
-  closeModal("userModal");
-}
-let editingUserRow=null;
-function openEditUserModal(button){
-  editingUserRow=button.closest("tr");
-  if(!editingUserRow) return;
-  const cells=editingUserRow.cells;
-  document.getElementById("editUserName").textContent=cells[0].textContent;
-  document.getElementById("editUserEmail").textContent=cells[1].textContent;
-  document.getElementById("editUserRole").value=cells[2].textContent.trim();
-  document.getElementById("editUserStatus").value=cells[3].textContent.trim();
-  openModal("editUserModal");
-}
-function saveUserChanges(){
-  if(editingUserRow){
-    const status=document.getElementById("editUserStatus").value;
-    editingUserRow.cells[2].textContent=document.getElementById("editUserRole").value;
-    editingUserRow.cells[3].innerHTML=`<span class="pill ${status==="Activo"?"ok":"off"}">${status}</span>`;
-  }
-  closeModal("editUserModal");
-}
 let currentStudyStep=1;
 function showStep(step){
   currentStudyStep=step;
